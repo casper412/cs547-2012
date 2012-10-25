@@ -1,13 +1,13 @@
 classdef runSim
     
     properties
-        basePath = '/Users/casper/Work/southwest_technologies/School/EECE547/Project/';
+        basePath = '';
     end
     
     methods
         % Called first to load the jar
         function init(this)
-          javaaddpath(strcat(this.basePath, 'bin/FlatWorld.jar'));
+          javaaddpath(strcat(this.basePath, '/FlatWorld.jar'));
         end
         % Return a frame which has the simulation object
         function out = loadGfx(this)
