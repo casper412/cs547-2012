@@ -72,18 +72,19 @@ classdef Sim
                   input = n.apply(output);
                   
                   % Eat in MatLab to capture result
+                  deltaEnergy = -10000;
                   if(input(this.IN_EAT) > 0.5) 
-                      output(this.OUT_DELTA_ENERGY) = world.eatSomething();
+                      deltaEnergy = world.eatSomething();
                       input(this.IN_EAT) = 0.;
                   end
                   
                   % Learn something new
-                  if(output(this.OUT_DELTA_ENERGY) > -1000)
+                  if(deltaEnergy > -1000)
                     n.learn(output); % Update weights because we eat something
                     
-                    if(output(this.OUT_DELTA_ENERGY) > 0.001)
+                    if(deltaEnergy > 0.001)
                         stats(i, 3) = stats(i, 3) + 1; % Count good eaten
-                    elseif(output(this.OUT_DELTA_ENERGY) < -0.001)
+                    elseif(deltaEnergy < -0.001)
                         stats(i, 2) = stats(i, 2) + 1; % Count bad eaten
                     else
                         stats(i, 1) = stats(i, 1) + 1; % Count neutral eaten
@@ -93,6 +94,7 @@ classdef Sim
                   % Simulate the next time step
                   output = world.runMatlab(time, input);
 
+                  output(this.OUT_DELTA_ENERGY) = deltaEnergy;
                   % Save everything that happened
                   outputs(time + 1, :, i) = transpose(output); 
                   
