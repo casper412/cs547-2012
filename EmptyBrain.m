@@ -1,3 +1,6 @@
+% This Brain returns no change. Fred will sit and die
+%
+%
 classdef EmptyBrain < Neuron
     
     methods
