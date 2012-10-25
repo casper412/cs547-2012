@@ -1,0 +1,117 @@
+classdef Sim
+    
+    properties (Constant = true)
+      OUT_ALIVE = 1;
+      % Actuator
+      OUT_SPEED = 2;
+      OUT_ROTATE = 3;
+      OUT_BODY_ANGLE = 4;
+      OUT_HEAD_ANGLE = 5;
+      OUT_CHARGE = 6;
+      
+      % Do not use
+      OUT_X = 7;
+      OUT_Y = 8;
+      OUT_ABS_BODY_ANGLE = 9;
+      OUT_ABS_HEAD_ANGLE = 10;
+      
+      % Soma
+      OUT_SOMA_MOUTH     = 12;
+      OUT_SOMA_INDEX     = 12;
+      OUT_SOMA_END       = 19; 
+      OUT_SOMA_COUNT     = 8;
+      OUT_COLLISION_FLAG = 20;
+      
+      % Acoustic
+      OUT_EAR_MAG_0      = 21;
+      OUT_EAR_MAG_1      = 22;
+      OUT_EAR_0_INDEX    = 23;
+      OUT_EAR_0_END      = 32;
+      OUT_EAR_1_INDEX    = 33;
+      OUT_EAR_1_END      = 42;
+      
+      % Vision
+      OUT_EYE_INDEX      = 43;
+      OUT_EYE_END        = 136;
+      OUT_EYE_BANDS      = 3;
+      
+      OUT_DELTA_ENERGY = 23;
+      
+      % Change bot
+      IN_SPEED = 1;
+      IN_ROTATE = 2;
+      IN_BODY_ANGLE = 3;
+      IN_HEAD_ANGLE = 4;
+      IN_EAT = 5;
+      
+    end
+    
+    methods
+        
+        function [stats, outputs] = doSim(this, n)
+            r = runSim
+            r.init
+            
+            frame = r.loadGfx();
+            world = frame.getSimulation().getWorld();
+            
+            runs = 1;
+            outputSize = 136;
+            %Initialize the outut
+            outputs = zeros(1,outputSize,runs);
+            stats = zeros(runs, 4);
+            
+            % Loop a few times
+            for i = 1:runs
+                output = zeros(outputSize, 1);
+                output(this.OUT_DELTA_ENERGY) = -10000;
+                outputs(1, :, i) = transpose(output);
+                
+                % Run the simulation
+                for time = 1:200000
+                  input = n.apply(output);
+                  
+                  % Eat in MatLab to capture result
+                  if(input(this.IN_EAT) > 0.5) 
+                      output(this.OUT_DELTA_ENERGY) = world.eatSomething();
+                      input(this.IN_EAT) = 0.;
+                  end
+                  
+                  % Learn something new
+                  if(output(this.OUT_DELTA_ENERGY) > -1000)
+                    n.learn(output); % Update weights because we eat something
+                    
+                    if(output(this.OUT_DELTA_ENERGY) > 0.001)
+                        stats(i, 3) = stats(i, 3) + 1; % Count good eaten
+                    elseif(output(this.OUT_DELTA_ENERGY) < -0.001)
+                        stats(i, 2) = stats(i, 2) + 1; % Count bad eaten
+                    else
+                        stats(i, 1) = stats(i, 1) + 1; % Count neutral eaten
+                    end
+                  end
+                  
+                  % Simulate the next time step
+                  output = world.runMatlab(time, input);
+
+                  % Save everything that happened
+                  outputs(time + 1, :, i) = transpose(output); 
+                  
+                  % Alive or Dead after time step
+                  if(output(this.OUT_ALIVE) > 0.5)
+                      % Alive
+                      
+                  else
+                      % Dead
+                      stats(i, 4) = time; % How long did we live
+                      world.restoreMatlab(time);
+                      break;
+                  end
+                end
+            end
+            % Shutdown the graphics
+            frame.dispose();
+            frame.getConsoleFrame().dispose();
+        end
+        
+    end
+end
