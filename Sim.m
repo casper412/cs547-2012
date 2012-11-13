@@ -1,3 +1,4 @@
+% TEST
 classdef Sim
     
     properties (Constant = true)
