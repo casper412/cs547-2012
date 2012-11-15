@@ -16,8 +16,13 @@ classdef SimpleDecision < Neuron
        function decisionOut = apply(this, acousticFeature0, acousticFeature1, somaFeature0, visualFeature0)
          
          decisionOut = zeros(1,5);
-         decisionOut(1) = visualFeature0(Arch2VisionProcessor.OUT_LEFT); %TODO: Make a constant
-         decisionOut(2) = visualFeature0(Arch2VisionProcessor.OUT_RIGHT);%TODO: Make a constant
+         if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.35, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.35)
+           decisionOut(1) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); %TODO: Make a constant
+           decisionOut(2) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);%TODO: Make a constant
+         else
+           decisionOut(1) = visualFeature0(Arch2VisionProcessor.OUT_LEFT); %TODO: Make a constant
+           decisionOut(2) = visualFeature0(Arch2VisionProcessor.OUT_RIGHT);%TODO: Make a constant
+         end
        end
        
        % Learn at each time step 
