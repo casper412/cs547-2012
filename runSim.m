@@ -2,7 +2,7 @@
 classdef runSim
     
     properties
-        basePath = '/Users/jeremysment/Documents/ClassWork/ClassesF12/Neural Networks/ProjectDocs2012/Project/svn/';
+        basePath = '/Users/jeremysment/Documents/ClassWork/ClassesF12/NeuralNetworks/ProjectDocs2012/Project/svn/';
     end
     
     methods
