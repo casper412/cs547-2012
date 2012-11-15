@@ -1,3 +1,4 @@
+% Base class for neurons
 classdef Neuron < handle
     
    methods(Abstract = true)
