@@ -1,4 +1,3 @@
-% TEST
 classdef Sim
     
     properties (Constant = true)
@@ -49,14 +48,15 @@ classdef Sim
     
     methods
         
-        function [stats, outputs] = doSim(this, n)
+        function [stats, outputs] = doSim(this, n, runs)
             r = runSim
             r.init
             
             frame = r.loadGfx();
+            %simulation = r.loadSim();
             world = frame.getSimulation().getWorld();
-            
-            runs = 1;
+            %world = simulation.getWorld();
+          
             outputSize = 136;
             %Initialize the outut
             outputs = zeros(1,outputSize,runs);
@@ -81,6 +81,7 @@ classdef Sim
                   
                   % Learn something new
                   if(deltaEnergy > -1000)
+                    output(this.OUT_DELTA_ENERGY) = deltaEnergy;
                     n.learn(output); % Update weights because we eat something
                     
                     if(deltaEnergy > 0.001)
@@ -110,6 +111,7 @@ classdef Sim
                       break;
                   end
                 end
+                disp(i);
             end
             % Shutdown the graphics
             frame.dispose();

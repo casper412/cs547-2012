@@ -1,8 +1,7 @@
-classdef Neuron
+classdef Neuron < handle
     
    methods(Abstract = true)
        muscles = apply(this, sensors);
-       learn(this, sensors);
    end
    
 end
