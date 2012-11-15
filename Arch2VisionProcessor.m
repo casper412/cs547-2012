@@ -11,13 +11,14 @@ classdef Arch2VisionProcessor < Neuron
     % Memory assicatied to this architecture
     % This is what must be saved and loaded
     properties
-        weights = zeros(1,1);
+        weights    = zeros(1,1);
+        totalError = 0.; 
     end
        
     methods
        function obj = Arch2VisionProcessor() 
            obj = obj@Neuron();
-           %obj.weights = transpose(rand(Sim.OUT_EYE_END - Sim.OUT_EYE_INDEX + 2, 1));
+           obj.weights = rand(1, 4);
        end
        
        % Called to make decisions
@@ -40,12 +41,36 @@ classdef Arch2VisionProcessor < Neuron
        end
        
        % Learn at each time step 
-       function learn(this, stomach, vision)
+       function learn(this, stomach, eyes)
+           eta = 0.1;
            
-       end
-       
-       function out = sigma(this, v)
-           out = 1. / (1. + exp(-v));
+           % Split eyes into groups
+           for i=0:30
+            rgb(i + 1, :) = eyes(i * 3 + 1 : i * 3 + 3);
+           end 
+           
+           % Compute the error
+           if(stomach > 0.01) 
+             notfood = 0.9;
+           else 
+             notfood = 0.1;
+           end
+           
+           % for each eye
+           for i = 1:31
+             x = [1; rgb(i, :)'];
+             activation = this.weights * x;
+             % Is the eye receiving light?
+             if(sum(x) > 0.01) 
+                 e = notfood - activation;
+
+                 %Compute delta in weight for linear neuron       
+                 cw = times(eta * e, x); 
+                 cw = transpose(cw);
+                 this.weights = plus(this.weights, cw);
+                 this.totalError = this.totalError + e;
+             end
+           end
        end
        
     end
