@@ -1,5 +1,9 @@
 classdef SimpleTouchProcessor < Neuron
     
+    properties(Constant = true)
+        OUT_MOUTH = 1;
+    end
+    
     % Memory assicatied to this architecture
     % This is what must be saved and loaded
     properties
@@ -15,6 +19,7 @@ classdef SimpleTouchProcessor < Neuron
        % Called to make decisions
        function features = apply(this, touch)
          features = zeros(4,1);
+         features(this.OUT_MOUTH) = touch(1);
        end
        
        % Learn at each time step 

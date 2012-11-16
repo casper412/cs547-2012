@@ -25,7 +25,8 @@ classdef SimpleMotorControl < Neuron
          elseif(decisions(2) > 0.)
              muscles(Sim.IN_BODY_ANGLE) = 4.; % TODO: Make a constant
          end
-
+         % Wire the decision to eat to the actual mouth
+         muscles(Sim.IN_EAT) = decisions(SimpleDecision.OUT_EAT);
        end
        
     end

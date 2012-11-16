@@ -1,5 +1,11 @@
 classdef SimpleDecision < Neuron
     
+    properties(Constant = true)
+        OUT_MOVE_LEFT  = 1;
+        OUT_MOVE_RIGHT = 2;
+        OUT_EAT        = 3;
+    end
+    
     % Memory assicatied to this architecture
     % This is what must be saved and loaded
     properties
@@ -16,13 +22,14 @@ classdef SimpleDecision < Neuron
        function decisionOut = apply(this, acousticFeature0, acousticFeature1, somaFeature0, visualFeature0)
          
          decisionOut = zeros(1,5);
-         if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.35, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.35)
-           decisionOut(1) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); %TODO: Make a constant
-           decisionOut(2) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);%TODO: Make a constant
-         else
-           decisionOut(1) = visualFeature0(Arch2VisionProcessor.OUT_LEFT); %TODO: Make a constant
-           decisionOut(2) = visualFeature0(Arch2VisionProcessor.OUT_RIGHT);%TODO: Make a constant
-         end
+         %if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.35, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.35)
+         %  decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); %TODO: Make a constant
+         %  decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);%TODO: Make a constant
+         %else
+           decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_LEFT); %TODO: Make a constant
+           decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_RIGHT);%TODO: Make a constant
+         %end
+         decisionOut(this.OUT_EAT) = somaFeature0(SimpleTouchProcessor.OUT_MOUTH) * visualFeature0(Arch2VisionProcessor.OUT_FOOD);
        end
        
        % Learn at each time step 

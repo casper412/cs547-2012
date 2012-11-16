@@ -33,12 +33,6 @@ classdef Arch2 < Neuron
          
          decisionout = this.decision.apply(ear0out, ear1out, touch0out, eyeout);
          muscles     = this.motor.apply(energy, decisionout);
-         
-         % Hard wire the touch center on the mouth to eating
-         % This is functionally equivilent to a perceptron
-         if(sensors(Sim.OUT_SOMA_MOUTH) > 0.5)
-            muscles(Sim.IN_EAT) = 1.;
-         end
        end
        
        % Learn at each time step 

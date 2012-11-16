@@ -39,12 +39,15 @@ classdef Arch2VisionProcessor < Neuron
          % Compute activations
          activation = zeros(31, 1);
          for i = 1:31
-           x = [0; rgb(i, :)'];
+           x = [1; rgb(i, :)'];
            activation(i) = this.weights * x;
          end
          
+         x = [1; center(:)];
+         food = this.weights * x;
+         
          % Agg up food left and right
-         leftFoodAgg  = sum(activation(1:14)) / 15.;
+         leftFoodAgg  = sum(activation(1:14))   / 15.;
          rightFoodAgg = sum(activation(16:31))  / 15.;
          
          leftFoodOut  =  min(1., leftFoodAgg);
@@ -57,10 +60,11 @@ classdef Arch2VisionProcessor < Neuron
          leftOut  =  min(1., leftAgg);
          rightOut =  min(1., rightAgg);
          
-         features(Arch2VisionProcessor.OUT_LEFT)  = leftOut;
-         features(Arch2VisionProcessor.OUT_RIGHT) = rightOut;
-         features(Arch2VisionProcessor.OUT_FOOD_LEFT)  = leftFoodOut;
-         features(Arch2VisionProcessor.OUT_FOOD_RIGHT) = rightFoodOut;
+         features(this.OUT_FOOD)       = food;
+         features(this.OUT_LEFT)       = leftOut;
+         features(this.OUT_RIGHT)      = rightOut;
+         features(this.OUT_FOOD_LEFT)  = leftFoodOut;
+         features(this.OUT_FOOD_RIGHT) = rightFoodOut;
        end
        
        % Learn at each time step 
