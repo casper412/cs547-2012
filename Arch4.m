@@ -33,6 +33,14 @@ classdef Arch4 < Neuron
          
          % Learn about what you see sounds like
          food = eyeout(Arch2VisionProcessor.OUT_FOOD);
+         % undo classification
+         if(food > 0.7)
+             food = 0.1;
+         elseif(food > 0.2)
+             food = 0.;
+         else 
+             food = -0.1;
+         end
          this.acoustic0.learn(food, ear0);
          this.acoustic0.learn(food, ear1);
          

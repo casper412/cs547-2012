@@ -5,7 +5,7 @@ classdef Arch4AcousticProcessor < Neuron
     properties
         weights = zeros(1,1);
         centers = zeros(1,1);
-        centerCount = Sim.OUT_EAR_BAND_COUNT * 2;
+        centerCount = Sim.OUT_EAR_BAND_COUNT * 3;
         totalError = zeros(10000,1);
         learnCount = 1;
     end
@@ -57,6 +57,9 @@ classdef Arch4AcousticProcessor < Neuron
          this.totalError(this.learnCount) = this.totalError(this.learnCount) + e^2;
          % Next learning event
          this.learnCount = this.learnCount + 1;
+         if(this.learnCount > 10000)
+             this.learnCount = 1;
+         end
        end
        
        % Activation function on the RBF network

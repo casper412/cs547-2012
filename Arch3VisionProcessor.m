@@ -11,8 +11,8 @@ classdef Arch3VisionProcessor < Neuron
        
     methods
        function obj = Arch3VisionProcessor() 
-           obj = obj@Neuron();
-           obj.weights = [0., 1.2, -0.8, 1.2];
+           obj = obj@Neuron();        
+           obj.weights = [0., 0.2925, -0.2359, 0.8702];
        end
        
        % Called to make decisions
@@ -31,10 +31,14 @@ classdef Arch3VisionProcessor < Neuron
          activation = zeros(31, 1);
          for i = 1:31
            x = [0; rgb(i, :)'];
+           if(sum(rgb(i, :)) > 0.01) 
+             x = x / norm(x);
+           end
            activation(i) = this.weights * x;
          end
          
          x = [1; center(:)];
+         x = x / norm(x);
          food = this.weights * x;
          
          % Agg up food left and right
@@ -80,17 +84,19 @@ classdef Arch3VisionProcessor < Neuron
            learn = 0;
            for i = 1:31
              x = [0; rgb(i, :)'];
-             activation = this.weights * x;
              % Is the eye receiving light?
              if(sum(rgb(i, :)) > 0.01) 
-                 e = notfood - activation;
+               x = x / norm(x); % Normalize the color channels
+               activation = this.weights * x;
+             
+               e = notfood - activation;
 
-                 % Compute delta in weight for linear neuron       
-                 cw = times(eta * e, x); 
-                 cw = transpose(cw);
-                 this.weights = plus(this.weights, cw);
-                 this.totalError(this.learnCount) = this.totalError(this.learnCount) + e^2;
-                 learn = learn + 1;
+               % Compute delta in weight for linear neuron       
+               cw = times(eta * e, x); 
+               cw = transpose(cw);
+               this.weights = plus(this.weights, cw);
+               this.totalError(this.learnCount) = this.totalError(this.learnCount) + e^2;
+               learn = learn + 1;
              end
            end
            % Take the average

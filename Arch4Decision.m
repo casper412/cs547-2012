@@ -17,14 +17,14 @@ classdef Arch4Decision < Neuron
          
          decisionOut = zeros(1,5);
          %disp(visualFeature0);
-         if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.35, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.35)
+         if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.01, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.01)
            decisionOut(SimpleDecision.OUT_MOVE_LEFT)  = ...
                visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); 
            decisionOut(SimpleDecision.OUT_MOVE_RIGHT) = ...
                visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);
          % Brightest combined with where we hear food
          else
-           if(abs(acousticFeature0(1) - acousticFeature1(1)) > acousticFeature1(1) * 0.4)
+           if(abs(acousticFeature0(1) - acousticFeature1(1)) > acousticFeature1(1) * 0.3)
            if(acousticFeature0(1) > acousticFeature1(1))
                decisionOut(SimpleDecision.OUT_MOVE_RIGHT) = 1.;
            else
