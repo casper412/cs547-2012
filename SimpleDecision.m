@@ -1,9 +1,10 @@
 classdef SimpleDecision < Neuron
     
     properties(Constant = true)
-        OUT_MOVE_LEFT  = 1;
-        OUT_MOVE_RIGHT = 2;
-        OUT_EAT        = 3;
+        OUT_MOVE_LEFT  = 1; % Go left - which can conflict with right
+        OUT_MOVE_RIGHT = 2; % Go right
+        OUT_EAT        = 3; % Order mouth to eat
+        OUT_FOOD       = 4; % Thinks food is close by
     end
     
     % Memory assicatied to this architecture
@@ -22,13 +23,14 @@ classdef SimpleDecision < Neuron
        function decisionOut = apply(this, acousticFeature0, acousticFeature1, somaFeature0, visualFeature0)
          
          decisionOut = zeros(1,5);
-         %if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.35, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.35)
-         %  decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); %TODO: Make a constant
-         %  decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);%TODO: Make a constant
-         %else
+         %disp(visualFeature0);
+         if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.5, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.5)
+           decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); %TODO: Make a constant
+           decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);%TODO: Make a constant
+         else
            decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_LEFT); %TODO: Make a constant
            decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_RIGHT);%TODO: Make a constant
-         %end
+         end
          decisionOut(this.OUT_EAT) = somaFeature0(SimpleTouchProcessor.OUT_MOUTH) * visualFeature0(Arch2VisionProcessor.OUT_FOOD);
        end
        

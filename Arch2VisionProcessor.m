@@ -21,7 +21,7 @@ classdef Arch2VisionProcessor < Neuron
     methods
        function obj = Arch2VisionProcessor() 
            obj = obj@Neuron();
-           obj.weights = rand(1, 4);
+           obj.weights = [0., -0.8, -0.8, 1.2];
        end
        
        % Called to make decisions
@@ -39,7 +39,7 @@ classdef Arch2VisionProcessor < Neuron
          % Compute activations
          activation = zeros(31, 1);
          for i = 1:31
-           x = [1; rgb(i, :)'];
+           x = [0; rgb(i, :)'];
            activation(i) = this.weights * x;
          end
          
@@ -86,7 +86,7 @@ classdef Arch2VisionProcessor < Neuron
            % for each eye
            learn = 0;
            for i = 1:31
-             x = [1; rgb(i, :)'];
+             x = [0; rgb(i, :)'];
              activation = this.weights * x;
              % Is the eye receiving light?
              if(sum(rgb(i, :)) > 0.01) 

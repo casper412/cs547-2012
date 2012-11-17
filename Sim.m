@@ -29,6 +29,7 @@ classdef Sim
       OUT_EAR_0_END      = 32;
       OUT_EAR_1_INDEX    = 33;
       OUT_EAR_1_END      = 42;
+      OUT_EAR_BAND_COUNT = 10; 
       
       % Vision
       OUT_EYE_INDEX      = 43;
