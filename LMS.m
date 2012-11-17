@@ -5,4 +5,3 @@ y=w0*x';
 e=d-y;
 w1=w0+eta*x*e;
 end
-
