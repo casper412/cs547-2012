@@ -118,9 +118,13 @@ classdef Sim
                 end
                 disp(i);
             end
+            
             % Shutdown the graphics
-            frame.dispose();
-            frame.getConsoleFrame().dispose();
+            if graphic ==1
+                frame.dispose();
+                frame.getConsoleFrame().dispose();
+            end
+            
         end
         
     end
