@@ -53,15 +53,19 @@ classdef Sim
             r = runSim
             r.init
             
+            graphic=0;
+            if graphic
             frame = r.loadGfx();
-            %simulation = r.loadSim();
             world = frame.getSimulation().getWorld();
-            %world = simulation.getWorld();
-          
+            else
+            simulation = r.loadSim();
+            world = simulation.getWorld();
+            end
             outputSize = 136;
             %Initialize the outut
             outputs = zeros(1,outputSize,runs);
             stats = zeros(runs, 4);
+           
             
             % Loop a few times
             for i = 1:runs
@@ -86,11 +90,11 @@ classdef Sim
                     n.learn(output); % Update weights because we eat something
                     
                     if(deltaEnergy > 0.001)
-                        stats(i, 3) = stats(i, 3) + 1; % Count good eaten
+                        stats(i, 1) = stats(i, 1) + 1; % Count good eaten
                     elseif(deltaEnergy < -0.001)
                         stats(i, 2) = stats(i, 2) + 1; % Count bad eaten
                     else
-                        stats(i, 1) = stats(i, 1) + 1; % Count neutral eaten
+                        stats(i, 3) = stats(i, 3) + 1; % Count neutral eaten
                     end
                   end
                   
