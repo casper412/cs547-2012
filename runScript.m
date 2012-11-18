@@ -1,10 +1,10 @@
 clear
 close all
 s = Sim;
-blah = Arch2;
-runs=1;
+blah = Arch3;
+runs=50;
 [stats, output] = s.doSim(blah,runs);
-arch='architecture 2'
+arch='architecture 3'
 
 
 % this protects from flooding stat files that weren't significant due to me
