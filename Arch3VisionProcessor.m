@@ -7,6 +7,11 @@ classdef Arch3VisionProcessor < Neuron
         weights    = zeros(1,1);
         totalError = zeros(10000,1);
         learnCount = 1;
+        
+        % Neuron to compute average output
+        avg        = Average();
+        %Neuron to cap output to 1.
+        cap        = Cap(1.);
     end
        
     methods
@@ -42,18 +47,18 @@ classdef Arch3VisionProcessor < Neuron
          food = this.weights * x;
          
          % Agg up food left and right
-         leftFoodAgg  = sum(activation(1:14))   / 15.;
-         rightFoodAgg = sum(activation(16:31))  / 15.;
+         leftFoodAgg  = this.avg.apply(activation(1:14));
+         rightFoodAgg = this.avg.apply(activation(16:31));
          
-         leftFoodOut  =  min(1., leftFoodAgg);
-         rightFoodOut =  min(1., rightFoodAgg);
+         leftFoodOut  =  this.cap.apply(leftFoodAgg);
+         rightFoodOut =  this.cap.apply(rightFoodAgg);
          
          % Single neuron on each side to build up the input
-         leftAgg  = sum(left)  / 45.;
-         rightAgg = sum(right) / 45.;
+         leftAgg  = this.avg.apply(left);
+         rightAgg = this.avg.apply(right);
          
-         leftOut  =  min(1., leftAgg);
-         rightOut =  min(1., rightAgg);
+         leftOut  =  this.cap.apply(leftAgg);
+         rightOut =  this.cap.apply(rightAgg);
          
          features(Arch2VisionProcessor.OUT_FOOD)       = food;
          features(Arch2VisionProcessor.OUT_LEFT)       = leftOut;

@@ -8,6 +8,8 @@ classdef SimpleTouchProcessor < Neuron
     % This is what must be saved and loaded
     properties
         weights = zeros(1,1);
+        
+        mouth   = Linear(1.);
     end
        
     methods
@@ -19,7 +21,8 @@ classdef SimpleTouchProcessor < Neuron
        % Called to make decisions
        function features = apply(this, touch)
          features = zeros(4,1);
-         features(this.OUT_MOUTH) = touch(1);
+         % Wire the mouth to the output feature
+         features(this.OUT_MOUTH) = this.mouth.apply(touch(1));
        end
        
        % Learn at each time step 

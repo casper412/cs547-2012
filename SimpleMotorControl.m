@@ -4,6 +4,14 @@ classdef SimpleMotorControl < Neuron
     % This is what must be saved and loaded
     properties
         weights = zeros(1,1);
+        
+        % Linear neuron to invert its input
+        speed = Linear([1./2.5, -1./2.5]);
+        %Linear neuron for eating anything you touch
+        mouth = Linear(1.);
+        % Control left or right
+        dirMax = WinnerTakeAll();
+        dir    = Linear([-4., .4]);
     end
        
     methods
@@ -16,17 +24,14 @@ classdef SimpleMotorControl < Neuron
        function muscles = apply(this, energy, decisions)
          muscles = zeros(5,1);
          
-         % Move at a fixed speed
-         % Functionally equivilent to a neuron that inverts its input
-         muscles(Sim.IN_SPEED) = (1. - energy) / 2.5;
-         
-         if(decisions(1) > decisions(2))
-            muscles(Sim.IN_BODY_ANGLE) =  -4.;  % TODO: Make a constant
-         elseif(decisions(2) > 0.)
-             muscles(Sim.IN_BODY_ANGLE) = 4.; % TODO: Make a constant
-         end
+         % Invert the speed and decrease as a function of energy
+         muscles(Sim.IN_SPEED) = this.speed.apply([1., energy]);
+         % Take the max direction and do that
+         vals = this.dirMax.apply([decisions(1) decisions(2)]);
+         muscles(Sim.IN_BODY_ANGLE) = this.dir.apply(vals);
+
          % Wire the decision to eat to the actual mouth
-         muscles(Sim.IN_EAT) = decisions(SimpleDecision.OUT_EAT);
+         muscles(Sim.IN_EAT) = this.mouth.apply(decisions(SimpleDecision.OUT_EAT));
        end
        
     end

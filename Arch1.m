@@ -5,6 +5,11 @@ classdef Arch1 < Neuron
     properties
         weights = zeros(1,1);
         classifications = zeros(1,2);
+        
+        totalError = zeros(1,1);
+        
+        speed = FixedOutput(0.1);
+        eat   = Perceptron(0.5);
     end
        
     methods
@@ -17,12 +22,8 @@ classdef Arch1 < Neuron
        function muscles = apply(this, sensors)
          muscles = zeros(5,1);
          % Move at a fixed speed
-         muscles(Sim.IN_SPEED) = 0.1;
-         % Hard wire the touch center on the mouth to eating
-         % This is functionallty equivilent to a perceptron
-         if(sensors(Sim.OUT_SOMA_MOUTH) > 0.5)
-            muscles(Sim.IN_EAT) = 1.;
-         end
+         muscles(Sim.IN_SPEED) = this.speed.apply(0.);
+         muscles(Sim.IN_EAT) = this.eat.apply(sensors(Sim.OUT_SOMA_MOUTH));
        end
        
        % Learn at each time step 
@@ -63,6 +64,7 @@ classdef Arch1 < Neuron
            a = size(this.classifications);
            v = a(1) + 1;
            this.classifications(v, :) = [notfood, nnotfood];
+           this.totalError(v, 1) = e * e;
        end
     end
 end
