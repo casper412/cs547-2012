@@ -17,7 +17,7 @@ classdef Arch3VisionProcessor < Neuron
     methods
        function obj = Arch3VisionProcessor() 
            obj = obj@Neuron();        
-           obj.weights = [0., 0.2925, -0.2359, 0.8702];
+           obj.weights = [0., -0.2359, 0.2925, 0.8702];
        end
        
        % Called to make decisions

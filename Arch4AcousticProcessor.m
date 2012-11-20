@@ -5,7 +5,7 @@ classdef Arch4AcousticProcessor < Neuron
     properties
         weights = zeros(1,1);
         centers = zeros(1,1);
-        centerCount = Sim.OUT_EAR_BAND_COUNT * 3;
+        centerCount = Sim.OUT_EAR_BAND_COUNT * 5;
         totalError = zeros(10000,1);
         learnCount = 1;
     end

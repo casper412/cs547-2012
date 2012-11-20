@@ -25,24 +25,11 @@ classdef Arch4 < Neuron
          eyes  = sensors(Sim.OUT_EYE_INDEX:Sim.OUT_EYE_END);
          touch = sensors(Sim.OUT_SOMA_INDEX:Sim.OUT_SOMA_END);
          energy= sensors(Sim.OUT_CHARGE);
-         
+   
          ear0out   = this.acoustic0.apply(ear0);
          ear1out   = this.acoustic0.apply(ear1);
          touch0out = this.touch0.apply(touch);
          eyeout    = this.eye0.apply(eyes);
-         
-         % Learn about what you see sounds like
-         food = eyeout(Arch2VisionProcessor.OUT_FOOD);
-         % undo classification
-         if(food > 0.7)
-             food = 0.1;
-         elseif(food > 0.2)
-             food = 0.;
-         else 
-             food = -0.1;
-         end
-         this.acoustic0.learn(food, ear0);
-         this.acoustic0.learn(food, ear1);
          
          decisionout = this.decision.apply(ear0out, ear1out, touch0out, eyeout);
          muscles     = this.motor.apply(energy, decisionout);

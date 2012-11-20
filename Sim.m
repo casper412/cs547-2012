@@ -25,14 +25,14 @@ classdef Sim
       % Acoustic
       OUT_EAR_MAG_0      = 21;
       OUT_EAR_MAG_1      = 22;
-      OUT_EAR_0_INDEX    = 23;
-      OUT_EAR_0_END      = 32;
-      OUT_EAR_1_INDEX    = 33;
-      OUT_EAR_1_END      = 42;
+      OUT_EAR_0_INDEX    = 24;
+      OUT_EAR_0_END      = 33;
+      OUT_EAR_1_INDEX    = 34;
+      OUT_EAR_1_END      = 43;
       OUT_EAR_BAND_COUNT = 10; 
       
       % Vision
-      OUT_EYE_INDEX      = 43;
+      OUT_EYE_INDEX      = 44;
       OUT_EYE_END        = 136;
       OUT_EYE_BANDS      = 3;
       
@@ -99,7 +99,7 @@ classdef Sim
                   
                   % Simulate the next time step
                   output = world.runMatlab(time, input);
-
+   
                   output(this.OUT_DELTA_ENERGY) = deltaEnergy;
                   % Save everything that happened
                   outputs(time + 1, :, i) = transpose(output); 
