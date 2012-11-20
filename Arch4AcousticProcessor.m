@@ -50,8 +50,9 @@ classdef Arch4AcousticProcessor < Neuron
              rbfOut(i) = this.phi(this.centers(i), sound);
          end
          
-         % Compute delta in weight for linear neuron       
-         cw = times(eta * e, rbfOut); 
+         % Compute delta in weight for linear neuron
+         dw = sigmoidPrime(1., activation);
+         cw = times(eta * e * dw, rbfOut); 
          
          this.weights = plus(this.weights, cw);
          this.totalError(this.learnCount) = this.totalError(this.learnCount) + e^2;

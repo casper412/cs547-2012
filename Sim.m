@@ -49,17 +49,16 @@ classdef Sim
     
     methods
         
-        function [stats, outputs] = doSim(this, n, runs)
+        function [stats, outputs] = doSim(this, n, runs, graphic)
             r = runSim
             r.init
             
-            graphic=0;
-            if graphic
-            frame = r.loadGfx();
-            world = frame.getSimulation().getWorld();
+            if graphic == 1
+              frame = r.loadGfx();
+              world = frame.getSimulation().getWorld();
             else
-            simulation = r.loadSim();
-            world = simulation.getWorld();
+              simulation = r.loadSim();
+              world = simulation.getWorld();
             end
             outputSize = 136;
             %Initialize the outut
