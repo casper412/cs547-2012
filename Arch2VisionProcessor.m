@@ -25,8 +25,8 @@ classdef Arch2VisionProcessor < Neuron
        
     methods
        function obj = Arch2VisionProcessor() 
-           obj = obj@Neuron();
-           obj.weights = [0., -0.8, -0.8, 1.2];
+           obj = obj@Neuron(); 
+           obj.weights = [0., -0.0269, 0.8923, -0.0422];
        end
        
        % Called to make decisions

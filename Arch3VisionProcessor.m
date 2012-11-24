@@ -16,8 +16,8 @@ classdef Arch3VisionProcessor < Neuron
        
     methods
        function obj = Arch3VisionProcessor() 
-           obj = obj@Neuron();        
-           obj.weights = [0., -0.2359, 0.2925, 0.8702];
+           obj = obj@Neuron();         
+           obj.weights = [0., -0.269, 0.8923, 0.2422];
        end
        
        % Called to make decisions
@@ -78,9 +78,9 @@ classdef Arch3VisionProcessor < Neuron
            
            % Compute the error
            if(stomach > 0.01)
-               notfood = 0.9;
+             notfood = 0.9;
            elseif(stomach > -0.01) 
-               notfood = 0.4;
+             notfood = 0.4;
            else 
              notfood = 0.1;
            end

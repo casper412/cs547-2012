@@ -7,8 +7,8 @@ classdef SimpleMotorControl < Neuron
         
         % Linear neuron to invert its input
         speed = Linear([1./2.5, -1./2.5]);
-        %Linear neuron for eating anything you touch
-        mouth = Linear(1.);
+        % Neuron for eating anything you touch
+        mouth = Perceptron(0.5);
         % Control left or right
         dirMax = WinnerTakeAll();
         dir    = Linear([-4., .4]);

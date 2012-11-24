@@ -5,6 +5,7 @@ classdef Arch3MotorControl < Neuron
     % This is what must be saved and loaded
     properties
         weights = zeros(1,1);
+        cap = Cap(1.);
     end
        
     methods
@@ -22,7 +23,8 @@ classdef Arch3MotorControl < Neuron
          % Slow down when something is in front of us
          % Slow down when we are near food
          food = decisions(SimpleDecision.OUT_FOOD) * 0.1;
-         muscles(Sim.IN_SPEED) = (1. - energy + food) / 2.5;
+         c = this.cap.apply(energy + food);
+         muscles(Sim.IN_SPEED) = (1. - c) / 2.5;
          moveStraight = ...
              1. - decisions(SimpleDecision.OUT_MOVE_LEFT) * decisions(SimpleDecision.OUT_MOVE_RIGHT);
          % Reduce the speed when going straight
@@ -30,7 +32,7 @@ classdef Arch3MotorControl < Neuron
          
          if(decisions(SimpleDecision.OUT_MOVE_LEFT) > decisions(SimpleDecision.OUT_MOVE_RIGHT))
             muscles(Sim.IN_BODY_ANGLE) =  -3.;  % TODO: Make a constant
-         elseif(decisions(SimpleDecision.OUT_MOVE_RIGHT) > 0.)
+         else %if(decisions(SimpleDecision.OUT_MOVE_RIGHT) > 0.)
              muscles(Sim.IN_BODY_ANGLE) = 3.; % TODO: Make a constant
          end
          % Wire the decision to eat to the actual mouth
