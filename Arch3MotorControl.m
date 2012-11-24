@@ -47,7 +47,7 @@ classdef Arch3MotorControl < Neuron
          s = this.speedDiv.apply(t);
          
          v = this.avg.apply([decisions(SimpleDecision.OUT_MOVE_LEFT), ...
-                             decisions(SimpleDecision.OUT_MOVE_RIGHT]);
+                             decisions(SimpleDecision.OUT_MOVE_RIGHT)]);
          v = this.stCap.apply(v);
          moveStraight = this.stLin.apply(1., v);
 
