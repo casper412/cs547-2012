@@ -1,0 +1,41 @@
+%% Winner Take Activation Network
+%% Take the maximum and make it the output
+classdef WinnerTakeActivation < Neuron
+    
+    % Memory assicatied to this neuron
+    properties
+    end
+       
+    methods
+       function obj = WinnerTakeActivation() 
+           obj = obj@Neuron();
+       end
+       
+       % Called to make decisions
+       function outputs = apply(this, vals)
+         s = size(vals);
+         s = s(2);
+         max  = -100000.;
+         mpos = 0;
+         % disp(s);
+         for i = 1:s
+           if vals(i) > max
+             max = vals(i);
+             mpos = i;
+           end
+         end
+         % disp(mpos);
+         for i = 1:s
+           if not(i == mpos)
+             vals(i) = 0.;
+           end
+         end
+         outputs = vals;
+       end
+       
+       % Learn at each time step 
+       function learn(this, vals)
+         % Do nothing
+       end
+    end
+end
