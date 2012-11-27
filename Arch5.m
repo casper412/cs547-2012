@@ -1,5 +1,5 @@
-%% Architecture 4
-classdef Arch4 < Neuron
+%% Architecture 5
+classdef Arch5 < Neuron
     
     % Memory assicatied to this architecture
     % This is what must be saved and loaded
@@ -7,13 +7,13 @@ classdef Arch4 < Neuron
         %weights = zeros(1,1);
         acoustic0 = Arch4AcousticProcessor;
         touch0    = SimpleTouchProcessor;
-        eye0      = Arch3VisionProcessor;
-        motor     = Arch3MotorControl;
-        decision  = Arch4Decision;
+        eye0      = Arch5VisionProcessor;
+        motor     = Arch5MotorControl;
+        decision  = Arch5Decision;
     end
        
     methods
-       function obj = Arch4() 
+       function obj = Arch5() 
            obj = obj@Neuron();
            %obj.weights = transpose(rand(Sim.OUT_EYE_END - Sim.OUT_EYE_INDEX + 2, 1));
        end

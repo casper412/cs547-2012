@@ -13,8 +13,7 @@ classdef WinnerTakeActivation < Neuron
        
        % Called to make decisions
        function outputs = apply(this, vals)
-         s = size(vals);
-         s = s(2);
+         s = length(vals);
          max  = -100000.;
          mpos = 0;
          % disp(s);
