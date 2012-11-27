@@ -49,7 +49,7 @@ classdef Arch3MotorControl < Neuron
          v = this.avg.apply([decisions(SimpleDecision.OUT_MOVE_LEFT), ...
                              decisions(SimpleDecision.OUT_MOVE_RIGHT)]);
          v = this.stCap.apply(v);
-         moveStraight = this.stLin.apply(1., v);
+         moveStraight = this.stLin.apply([1.4, v]);
 
          % Reduce the speed when going straight
          % Use a neuron that multiplies instead of sums
