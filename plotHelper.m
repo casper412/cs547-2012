@@ -36,9 +36,9 @@ function [timeHist, totEatHist, eatTypeBar, errPlot]=plotHelper(stats, totalErro
                        
 
                         % Double check that I have my columns right
-                        neutral = sum(stats(:,2));
-                        food = sum(stats(:,3));
-                        poison = sum(stats(:,1));
+                        neutral = sum(stats(:,3));
+                        food = sum(stats(:,1));
+                        poison = sum(stats(:,2));
                         
                         Y=[neutral food poison];
                         Y(2,:) = 0; 
@@ -53,7 +53,7 @@ function [timeHist, totEatHist, eatTypeBar, errPlot]=plotHelper(stats, totalErro
                        title({sprintf('Bar Graph of Type Objects Eaten for Architecture %d',archNum)},...
                             'FontName','Times New Roman', 'FontSize', 18, ...
                            'FontWeight', 'bold', 'Color', [0 0 0]);
-                       xlabel({sprintf('Architecture %d\nTotal objects eaten=%d\nFood=%d, Poison=%d, Neutral=%d',archNum, sum(sum(Y)),Y(1,1), Y(1,2),Y(1,3))}, 'FontName', 'Times New Roman', 'FontSize', 16, ...
+                       xlabel({sprintf('Architecture %d\nTotal objects eaten=%d\nFood=%d, Poison=%d, Neutral=%d',archNum, sum(sum(Y)),Y(1,2), Y(1,3),Y(1,1))}, 'FontName', 'Times New Roman', 'FontSize', 16, ...
                         'FontWeight', 'bold');
                        ylabel('Total Objects', 'FontName', 'Times New Roman', 'FontSize', 16, ...
                            'FontWeight', 'bold', 'FontAngle', 'normal');

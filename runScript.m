@@ -1,11 +1,11 @@
 clear
 close all
 s = Sim;
-archNum=1
-blah = Arch1;
-runs=4;
+archNum=5
+blah = Arch5;
+runs=1;
 [stats, output] = s.doSim(blah,runs,1);
-arch=sprintf('architecture 4 (LMS)');
+
 
 %save
 % this protects from flooding stat files that weren't significant due to me
