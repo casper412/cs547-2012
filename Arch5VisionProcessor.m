@@ -22,17 +22,22 @@ classdef Arch5VisionProcessor < Neuron
         winAct   = WinnerTakeActivation();
         win        = WinnerTakeAll();
         
-        foodThresh = Perceptron(0.45);  %this is the level on which the decision is made for food not food.  High value 
+        foodThresh = Perceptron(0.15);  %this is the level on which the decision is made for food not food.  High value 
         %implies pickier eating.
-        
-        angles = Linear([-15., -14., -13., -12., -11., -10., -9., -8., -7.,...
-            -6., -5., -4., -3., -2., -1.5, -1, 1, 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12., 13., 14., 15 ]) 
+        anglesVector = [-80., -70., -60., -45., -25., -15., -9., -8., -7.,...
+            -6., -5., -4., -3., -2., -1, 0, 1, 2., 3., 4., 5., 6., 7., 8., 9., 15., 25., 45., 60., 70., 85 ];
+%         anglesVector = [-15., -14., -13., -12., -11., -10., -9., -8., -7.,...
+%              -6., -5., -4., -3., -2., -1, 0, 1, 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12., 13., 14., 15 ];
+        angles = Linear(0.); 
+        cosAngles = zeros(1,1);
     end
        
     methods
        function obj = Arch5VisionProcessor() 
            obj = obj@Neuron();        
            obj.weights = [0., -0.2359, 0.8702, 0.2925];
+           obj.angles = Linear(obj.anglesVector); 
+           obj.cosAngles = 1%cosd(obj.anglesVector);
        end
        
        % Called to make decisions
@@ -49,12 +54,13 @@ classdef Arch5VisionProcessor < Neuron
          % Compute activations
          activation = zeros(31, 1);
          intensity   = zeros(31, 1);
+        
          for i = 1:31
            x = [0; rgb(i, :)'];
+           intensity(i)   = sum(x); % 31 sums of RGB triplets
            if(sum(rgb(i, :)) > 0.01) 
              x = x / norm(x);  %normalize rgb neurons
            end
-           intensity(i)   = sum(x); % 31 sums of RGB triplets
            activation(i) = this.weights * x;  %here we have all food and not food classifications
          end
          
@@ -65,17 +71,19 @@ classdef Arch5VisionProcessor < Neuron
           foodCenter = this.weights * x;
           wintensity = this.win.apply(intensity)';
           brightAng=this.angles.apply(wintensity);
-       
-          brightest = this.winAct.apply(activation);
+
+          %%%
+          brightFood=activation.*intensity.*this.cosAngles';
+          brightest = this.win.apply(brightFood);
           
           foodGuess = zeros(31, 1);
-          for i=1:31
-            foodGuess(i) = this.foodThresh.apply(brightest(i));
-          end
+%           for i=1:31
+%             foodGuess(i) = this.foodThresh.apply(brightest(i));
+%           end
           
-          food= sum(foodGuess);         
-          winangle = this.angles.apply(foodGuess');
-
+          food= this.foodThresh.apply(sum(brightest.*activation));         
+          winangle = this.angles.apply(brightest');
+%%%
          features(Arch5VisionProcessor.OUT_FOOD)      = food;
          features(Arch5VisionProcessor.OUT_ANGLE)     = winangle;
          features(Arch5VisionProcessor.OUT_BRIGHT)    = brightAng;

@@ -42,7 +42,7 @@ classdef Arch5MotorControl < Neuron
          c = this.cap.apply(energy + food);
          c = this.energyFlip.apply(c);
          t = this.energyTot.apply([1., c]);
-         s = this.speedDiv.apply(t);
+         s = .1;%this.speedDiv.apply(t);
          
          % Comment ouf the speed control when moving straight
          % 1. - abs(angle) / 360

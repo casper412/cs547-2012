@@ -49,7 +49,7 @@ classdef Arch5Decision < Neuron
          earOut    = this.earThresh.apply(abs(le - re));
          % Fixed value to fallback to the brightest object if nothing is
          % visible and our ears are equal
-         brightOut = 0.5;
+         brightOut = 0.2;
          % Food or brightest won?
          dec       = this.foodWin.apply([foodOut, earOut, brightOut]);
          
@@ -62,7 +62,7 @@ classdef Arch5Decision < Neuron
          decisionOut(Arch5Decision.OUT_MOVE_ANGLE)  = ...
              this.combineOut.apply(angle);
         
-         sf = this.seeFood.apply(visualFeature0(Arch2VisionProcessor.OUT_FOOD));
+         sf = this.seeFood.apply(visualFeature0(Arch5VisionProcessor.OUT_FOOD));
          om = this.capMouth.apply(somaFeature0(SimpleTouchProcessor.OUT_MOUTH));
          % Range of 0. to 2.
          % 1. means either touched something or see food

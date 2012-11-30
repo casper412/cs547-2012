@@ -1,5 +1,5 @@
 function [timeHist, totEatHist, eatTypeBar, distHist]=plotHelper(stats, output, archDescription)
-%   [timeHist, totEatHist, eatTypeBar, errPlot]=plotHelper(stats, totalError, archDescription)
+%   [timeHist, totEatHist, eatTypeBar, errPlot]=plotHelper(stats, output, archDescription)
 %   Creates {histogram of time steps for each run, histogram of total objects eaten 
 %   a stacked bar plot of the type of objects eaten, and a
 %   total error plot] that can be used only for artificial neural network
@@ -67,6 +67,7 @@ function [timeHist, totEatHist, eatTypeBar, distHist]=plotHelper(stats, output, 
                         'FontWeight', 'bold');
                        ylabel('Total Objects', 'FontName', 'Times New Roman', 'FontSize', 16, ...
                            'FontWeight', 'bold', 'FontAngle', 'normal');
+                       axis([0,size(stats,1),0,1.2*max(sum(stats(:,1:3),2))]);
 
                         % Add a legend
                         legend('Neutral', 'Food', 'Poison');
