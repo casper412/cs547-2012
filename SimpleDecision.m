@@ -1,3 +1,4 @@
+% Used in Architecture 2
 classdef SimpleDecision < Neuron
     
     properties(Constant = true)
@@ -6,30 +7,30 @@ classdef SimpleDecision < Neuron
         OUT_EAT        = 3; % Order mouth to eat
         OUT_FOOD       = 4; % Thinks food is close by
     end
-    
-    % Memory assicatied to this architecture
-    % This is what must be saved and loaded
-    properties
-        weights = zeros(1,1);
-    end
        
     methods
        function obj = SimpleDecision() 
-           obj = obj@Neuron();
-           obj.weights = transpose(rand(Sim.OUT_EYE_END - Sim.OUT_EYE_INDEX + 2, 1));
+         obj = obj@Neuron();  
        end
        
        % Called to make decisions
        function decisionOut = apply(this, acousticFeature0, acousticFeature1, somaFeature0, visualFeature0)
          
          decisionOut = zeros(1,5);
-         %disp(visualFeature0);
+         
+         % This if block is demonstrated in Arch3Decision
+         % The out_food_left / out_food_right are combined
+         % A winner take all is done against a constant
+         % The winner take all outputs are cross wired to inhibit the other
+         % loser which is tied back into the two different turning
+         % possibilities.
+         
          if or(visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT) > 0.5, visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT) > 0.5)
-           decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); %TODO: Make a constant
-           decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);%TODO: Make a constant
+           decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_FOOD_LEFT); 
+           decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_FOOD_RIGHT);
          else
-           decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_LEFT); %TODO: Make a constant
-           decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_RIGHT);%TODO: Make a constant
+           decisionOut(this.OUT_MOVE_LEFT)  = visualFeature0(Arch2VisionProcessor.OUT_LEFT); 
+           decisionOut(this.OUT_MOVE_RIGHT) = visualFeature0(Arch2VisionProcessor.OUT_RIGHT);
          end
          decisionOut(this.OUT_EAT) = somaFeature0(SimpleTouchProcessor.OUT_MOUTH) * visualFeature0(Arch2VisionProcessor.OUT_FOOD);
        end
