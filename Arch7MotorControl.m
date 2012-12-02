@@ -44,38 +44,44 @@ classdef Arch7MotorControl < Neuron
          foodT = this.foodThresh.apply(decisions(SimpleDecision.OUT_FOOD));
          food = this.foodScale.apply(foodT);
          c = this.cap.apply(energy + food);
-         c = this.energyFlip.apply(c);
-         t = this.energyTot.apply([1.5, c]);
+         c2 = this.energyFlip.apply(c);
+         t = this.energyTot.apply([1.5, c2]);
          s = this.speedDiv.apply(t);
          
          v = this.avg.apply([decisions(SimpleDecision.OUT_MOVE_LEFT), ...
                              decisions(SimpleDecision.OUT_MOVE_RIGHT)]);
          v = this.stCap.apply(v);
          moveStraight = this.stLin.apply([1.4, v]);
-
          
+         readyToEat = this.eatThresh.apply(decisions(SimpleDecision.OUT_EAT));
+         availEnergy = energy + food;
          % Turning
          lr = ...
            this.leftRight.apply([decisions(SimpleDecision.OUT_MOVE_LEFT), ...
                                  decisions(SimpleDecision.OUT_MOVE_RIGHT)]);
-                             
-         % Reduce the speed when going straight
-         % Use a neuron that multiplies instead of sums
-         if(energy + food > 1.0 && this.eatThresh.apply(decisions(SimpleDecision.OUT_EAT)) > 0.5) 
+         % Perceptron activating at 2. with inputs of energy, food, and
+         % decision to eat
+         % inhibits Speed and mouth with a floor at zero
+         if(availEnergy > 1.0 && readyToEat > 0.5) 
              s = 0;
              muscles(Sim.IN_EAT) = 0;
          else
+             % Winner take all between 0.65 constant and v
+             % With lateral inhibition to take either a small turn angle or
+             % large one and either a fixed slow speed or a large one
              if(v > 0.65)
                muscles(Sim.IN_BODY_ANGLE) = this.turnLittle.apply(lr);
-               s = 0.05; %8 * (1-decisions(SimpleDecision.OUT_FOOD));
+               s = 0.05;
              else
-               s = s * moveStraight;% 0.20;
+               % Reduce the speed when going straight
+               % Use a neuron that multiplies instead of sums
+               s = s * moveStraight;
                muscles(Sim.IN_BODY_ANGLE) = this.turn.apply(lr);
              end
              
-             muscles(Sim.IN_EAT) = this.eatThresh.apply(decisions(SimpleDecision.OUT_EAT));
+             muscles(Sim.IN_EAT) = readyToEat;
          end
-         muscles(Sim.IN_SPEED) = s ;%* moveStraight;
+         muscles(Sim.IN_SPEED) = s;
 
 
          % Wire the decision to eat to the actual mouth
