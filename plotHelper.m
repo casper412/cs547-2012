@@ -84,19 +84,25 @@ function [timeHist, totEatHist, eatTypeBar, distHist]=plotHelper(stats, output, 
 %                            'FontWeight', 'bold', 'Color', [0 0 0]);
 
              for i=1:size(output,3)
-                 dist_(i)=sum(output(:,2,i))
+                 dist_(i,1)=sum(output(:,1,i))
              end
+             
              for i=1:size(output,3)
-                 distPerOb(i)=sum(output(:,2,i))/sum(stats(i,1:3));
+                 if sum(stats(i,1:3))~=0
+                    distPerOb(i,1)=dist_(i)/sum(stats(i,1:3));
+                 else
+                     distPerOb(i,1)=dist_(i)
+                 end
              end
+
 
              distHist=figure; %histogram of distance traveled
 
-                       hist(dist_)
-                       title({sprintf('Histogram of Total Distance Traveled\nArchitecture %s',archDescription)},...
+                       hist(distPerOb)
+                       title({sprintf('Histogram of Total Distance Traveled per Object Eaten\nArchitecture %s',archDescription)},...
                             'FontName','Times New Roman', 'FontSize', 18, ...
                            'FontWeight', 'bold', 'Color', [0 0 0]);
-                       xlabel({sprintf('Number of Objects\n\nAverage total distance = %1.1f, STD=%1.1f\nAve. dist. per object eaten = %1.1f, STD = %1.1f',mean(dist_), std(dist_), mean(distPerOb),std(distPerOb))}, 'FontName', 'Times New Roman', 'FontSize', 16, ...
+                       xlabel({sprintf('Number of Objects\n\nAve. dist. per object eaten = %1.1f, STD = %1.1f\nAverage total distance = %1.1f, STD=%1.1f', mean(distPerOb),std(distPerOb),mean(dist_), std(dist_))}, 'FontName', 'Times New Roman', 'FontSize', 16, ...
                         'FontWeight', 'bold');
                        ylabel('Occurrences ', 'FontName', 'Times New Roman', 'FontSize', 16, ...
                            'FontWeight', 'bold', 'FontAngle', 'normal');

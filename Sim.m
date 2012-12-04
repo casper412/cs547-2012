@@ -49,7 +49,7 @@ classdef Sim
     
     methods
         
-        function [stats, outputs] = doSim(this, n, runs, graphic)
+        function [stats, speed] = doSim(this, n, runs, graphic)
             r = runSim
             r.init
             
@@ -63,6 +63,7 @@ classdef Sim
             outputSize = 136;
             %Initialize the outut
             outputs = zeros(1,outputSize,runs);
+            speed=zeros(1,1,1);
             stats = zeros(runs, 4);
            
             
@@ -102,7 +103,8 @@ classdef Sim
    
                   output(this.OUT_DELTA_ENERGY) = deltaEnergy;
                   % Save everything that happened
-                  outputs(time + 1, :, i) = transpose(output); 
+                  outputs(time + 1, :, i) = transpose(output);
+                  speed(time+1,:,i)=output(2);
                   
                   % Alive or Dead after time step
                   if(output(this.OUT_ALIVE) > 0.5)
