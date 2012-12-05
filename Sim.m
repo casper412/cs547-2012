@@ -60,13 +60,13 @@ classdef Sim
               simulation = r.loadSim();
               world = simulation.getWorld();
             end
-            outputSize = 136;
+            
             %Initialize the outut
-            outputs = zeros(1,outputSize,runs);
+            
             speed=zeros(1,1,1);
             stats = zeros(runs, 4);
            
-            
+            outputSize=136;
             % Loop a few times
             for i = 1:runs
                 output = zeros(outputSize, 1);
@@ -74,7 +74,7 @@ classdef Sim
                 outputs(1, :, i) = transpose(output);
                 
                 % Run the simulation
-                for time = 1:200000
+                for time = 1:42000
                   input = n.apply(output);
                   
                   % Eat in MatLab to capture result
@@ -103,8 +103,8 @@ classdef Sim
    
                   output(this.OUT_DELTA_ENERGY) = deltaEnergy;
                   % Save everything that happened
-                  outputs(time + 1, :, i) = transpose(output);
-                  speed(time+1,:,i)=output(2);
+                  %outputs(time + 1, :, i) = transpose(output);
+                  speed(time+1,1,i)=output(2);
                   
                   % Alive or Dead after time step
                   if(output(this.OUT_ALIVE) > 0.5)
